@@ -25,19 +25,129 @@ To encrypt a message, one would break the message into digrams (groups of 2 lett
 
 ## ALGORITHM:
 
-STEP-1: Read the plain text from the user.
-STEP-2: Read the keyword from the user.
-STEP-3: Arrange the keyword without duplicates in a 5*5 matrix in the row order and fill the remaining cells with missed out letters in alphabetical order. Note that ‘i’ and ‘j’ takes the same cell.
-STEP-4: Group the plain text in pairs and match the corresponding corner letters by forming a rectangular grid.
-STEP-5: Display the obtained cipher text.
+STEP-1: Read the plain text from the user.<br>
+STEP-2: Read the keyword from the user.<br>
+STEP-3: Arrange the keyword without duplicates in a 5*5 matrix in the row order and fill the remaining cells with missed out letters in alphabetical order. Note that ‘i’ and ‘j’ takes the same cell.<br>
+STEP-4: Group the plain text in pairs and match the corresponding corner letters by forming a rectangular grid.<br>
+STEP-5: Display the obtained cipher text.<br>
 
 
 
 
-Program:
+## Program:
+```
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char key[100], text[100], table[25];
+    int i, j, k = 0, a, b, r1, c1, r2, c2;
+    int used[26] = {0};
+
+    printf("Enter the key: ");
+    scanf("%s", key);
+
+    printf("Enter the plaintext: ");
+    scanf("%s", text);
+
+    used['J' - 'A'] = 1;
+
+    for(i = 0; key[i] != '\0'; i++)
+    {
+        char ch = toupper(key[i]);
+
+        if(ch == 'J')
+            ch = 'I';
+
+        if(ch >= 'A' && ch <= 'Z' && !used[ch - 'A'])
+        {
+            table[k++] = ch;
+            used[ch - 'A'] = 1;
+        }
+    }
+
+    for(i = 0; i < 26; i++)
+    {
+        if(!used[i])
+            table[k++] = 'A' + i;
+    }
+
+    printf("\nKey Matrix:\n");
+
+    for(i = 0; i < 25; i++)
+    {
+        printf("%c ", table[i]);
+
+        if(i % 5 == 4)
+            printf("\n");
+    }
+
+    for(i = 0; text[i] != '\0'; i++)
+        text[i] = toupper(text[i]);
+
+    printf("\nCipher Text: ");
+
+    for(i = 0; text[i] != '\0'; i += 2)
+    {
+        a = text[i] - 'A';
+
+        if(text[i + 1] == '\0')
+            b = 'X' - 'A';
+        else
+            b = toupper(text[i + 1]) - 'A';
+
+        if(text[i] == 'J')
+            a = 'I' - 'A';
+
+        if(text[i + 1] == 'J')
+            b = 'I' - 'A';
+
+        for(j = 0; j < 25; j++)
+        {
+            if(table[j] == 'A' + a)
+            {
+                r1 = j / 5;
+                c1 = j % 5;
+            }
+
+            if(table[j] == 'A' + b)
+            {
+                r2 = j / 5;
+                c2 = j % 5;
+            }
+        }
+
+        if(r1 == r2)
+        {
+            printf("%c%c",
+                   table[r1 * 5 + (c1 + 1) % 5],
+                   table[r2 * 5 + (c2 + 1) % 5]);
+        }
+        else if(c1 == c2)
+        {
+            printf("%c%c",
+                   table[((r1 + 1) % 5) * 5 + c1],
+                   table[((r2 + 1) % 5) * 5 + c2]);
+        }
+        else
+        {
+            printf("%c%c",table[r1 * 5 + c2],table[r2 * 5 + c1]);
+        }
+    }
+
+    return 0;
+}
 
 
+```
 
 
+## Output:
 
-Output:
+<img width="627" height="377" alt="Screenshot 2026-10-29 110859" src="https://github.com/user-attachments/assets/a6a142e5-6f1a-4126-8312-75fe2da078e6" />
+
+## Result:  
+Thus the implementation of  Playfair Cipher had been executed successfully.
